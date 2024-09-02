@@ -53,11 +53,13 @@ def top_players_by_cost(df, position, cost, metric, count, asc = False, minutes_
         return df.loc[(df['position'] == position) & (df['now_cost'] <= cost)][columns].sort_values(by=metric, ascending=asc).head(count)
     
 def get_team(df, players):
-    columns = ['web_name', 'team', 'now_cost', 'selected_by_percent', 'percent_of_season_played', 'ppm', 'next_match', 'next_5_avg_FDRs',
-               'goals_scored', 'assists', 'goal_involvements', 'expected_goal_involvements', 'gi_vs_xgi', 'expected_goal_involvements_per_90', 'total_points']
+    columns = ['web_name', 'position', 'team', 'now_cost', 'selected_by_percent', 'percent_of_season_played', 'ppm', 'next_match', 'next_5_avg_FDRs',
+               'goals_scored', 'assists', 'goal_involvements', 'clean_sheets', 'expected_goal_involvements', 'gi_vs_xgi', 'expected_goal_involvements_per_90', 'total_points']
     
     team = df.loc[df['web_name'].isin(players)][columns].sort_values(by='total_points', ascending=False)
-    team.loc['Column_Total']= team.sum(numeric_only=True, axis=0)
+    #change column types to str so they are not included in final summation row
+    team = team.astype({'now_cost': str, 'selected_by_percent': str, 'percent_of_season_played': str, 'ppm': str, 'next_5_avg_FDRs': str})
+    team.loc['Total']= team.sum(numeric_only=True, axis=0)
     team.fillna('-', inplace=True)
     return team
 
