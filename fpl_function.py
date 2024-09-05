@@ -5,7 +5,7 @@ import numpy as np
 def top_players(df, position, sorting, asc, count, minutes_req = False):
     #only return players who played greater than or equal to the average minutes for their position
     avg_min = df.loc[df['position'] == position]['minutes'].mean()
-    columns = ['web_name', 'team', 'now_cost', 'selected_by_percent', 'bps', 'percent_of_season_played', 'ppm', 'next_match', 'next_5_avg_FDRs']
+    columns = ['web_name', 'team', 'now_cost', 'selected_by_percent', 'bps', 'percent_of_season_played', 'ppm', 'xGI_pm', 'next_match', 'next_5_avg_FDRs']
     if position == 'Goalkeeper':
         columns = columns + ['clean_sheets', 'saves', 'goals_conceded', 'expected_goals_conceded', 'gc_vs_xgc', 'total_points']
     elif position == 'Defender':
@@ -40,7 +40,7 @@ def average_by_cost(df, metric, position):
 
 def top_players_by_cost(df, position, cost, metric, count, asc = False, minutes_req = False):
     avg_min = df.loc[df['position'] == position]['minutes'].mean()
-    columns = ['web_name', 'team', 'now_cost', 'selected_by_percent', 'bps', 'percent_of_season_played', 'ppm', 'next_match', 'next_5_avg_FDRs']
+    columns = ['web_name', 'team', 'now_cost', 'selected_by_percent', 'bps', 'percent_of_season_played', 'ppm', 'xGI_pm', 'next_match', 'next_5_avg_FDRs']
     if position == 'Goalkeeper':
         columns = columns + ['clean_sheets', 'saves', 'goals_conceded', 'expected_goals_conceded', 'gc_vs_xgc', 'total_points']
     elif position == 'Defender':
@@ -53,7 +53,7 @@ def top_players_by_cost(df, position, cost, metric, count, asc = False, minutes_
         return df.loc[(df['position'] == position) & (df['now_cost'] <= cost)][columns].sort_values(by=metric, ascending=asc).head(count)
     
 def get_team(df, players):
-    columns = ['web_name', 'position', 'team', 'now_cost', 'selected_by_percent', 'percent_of_season_played', 'ppm', 'next_match', 'next_5_avg_FDRs',
+    columns = ['web_name', 'position', 'team', 'now_cost', 'selected_by_percent', 'percent_of_season_played', 'ppm', 'xGI_pm', 'next_match', 'next_5_avg_FDRs',
                'goals_scored', 'assists', 'goal_involvements', 'clean_sheets', 'expected_goal_involvements', 'gi_vs_xgi', 'expected_goal_involvements_per_90', 'total_points']
     
     team = df.loc[df['web_name'].isin(players)][columns].sort_values(by='total_points', ascending=False)
@@ -64,7 +64,7 @@ def get_team(df, players):
     return team
 
 def compare_teams(df, team1, team2, captain1=None, captain2=None):
-    columns = ['web_name', 'team', 'now_cost', 'selected_by_percent', 'percent_of_season_played', 'ppm', 'next_match', 'next_5_avg_FDRs',
+    columns = ['web_name', 'team', 'now_cost', 'selected_by_percent', 'percent_of_season_played', 'ppm', 'xGI_pm', 'next_match', 'next_5_avg_FDRs',
                'goals_scored', 'assists', 'goal_involvements', 'expected_goal_involvements', 'gi_vs_xgi', 'expected_goal_involvements_per_90', 'total_points']
     cap_columns = ['bps', 'ppm', 'points_per_minute', 'gi_vs_xgi', 'total_points', 'goals_scored', 'assists', 'expected_goals', 'expected_assists', 'expected_goal_involvements', 
                    'expected_goals_per_90', 'expected_assists_per_90', 'expected_goal_involvements_per_90']
